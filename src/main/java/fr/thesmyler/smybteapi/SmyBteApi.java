@@ -4,6 +4,8 @@ import static fr.thesmyler.smybteapi.SmyBteApiUtil.getPropertyOrEnv;
 import static fr.thesmyler.smybteapi.SmyBteApiUtil.touchJsonResponse;
 import static spark.Spark.after;
 import static spark.Spark.get;
+import static spark.Spark.ipAddress;
+import static spark.Spark.port;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -28,14 +30,17 @@ import spark.Response;
  */
 public class SmyBteApi {
 	
-	public static String VERSION = null;
+	public static String VERSION;
 	public static final String SOFTWARE_LICENSE = "MIT License";
 	public static final String SOFTWARE_CREDIT = "SmylerMC <smyler@mail.com>";
 	public static final String SOFTWARE_REPO = "https://github.com/SmylerMC/smyler-bte-api";
 	
-	public static String INSTANCE_NAME = null;
-	public static String INSTANCE_CREDIT = null;
-	public static String INSTANCE_INFO = null;
+	public static String INTERFACE;
+	public static int PORT = -1;
+	
+	public static String INSTANCE_NAME;
+	public static String INSTANCE_CREDIT;
+	public static String INSTANCE_INFO;
 	
 	public static final Gson GSON = new GsonBuilder().create();
 	public static final Gson GSON_PRETTY = new GsonBuilder().setPrettyPrinting().create();
@@ -68,12 +73,28 @@ public class SmyBteApi {
     }
     
     public static void setupPreferences() {
+    	String portStr = getPropertyOrEnv("smybteapi.port");
+    	if(portStr != null) {
+    		try {
+    			PORT = Integer.parseInt(portStr);
+    		} catch(NumberFormatException e) {
+    			LOGGER.severe("Failed to parse port number");
+    			throw new RuntimeException("Forcibly shuting down!");
+    		}
+    	}
+    	INTERFACE = getPropertyOrEnv("smybteapi.interface");
     	INSTANCE_NAME = getPropertyOrEnv("smybteapi.instance.name");
     	INSTANCE_CREDIT = getPropertyOrEnv("smybteapi.instance.credit");
     	INSTANCE_INFO = getPropertyOrEnv("smybteapi.instance.info");
     }
     
     public static void setupSpark() {
+    	if(INTERFACE != null) {
+    		ipAddress(INTERFACE);
+    	}
+    	if(PORT > 0) {
+    		port(PORT);
+    	}
         after(SmyBteApi::logRequestResponsePair);
         get("/info", SmyBteApi::info);
     }

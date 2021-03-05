@@ -5,7 +5,7 @@ plugins {
 
 sourceCompatibility = 1.8
 group = "fr.thesmyler"
-version = "0.0." + ('git rev-list --count HEAD'.execute().text.trim())
+version = "1.0." + ('git rev-list --count HEAD'.execute().text.trim())
 
 repositories {
     

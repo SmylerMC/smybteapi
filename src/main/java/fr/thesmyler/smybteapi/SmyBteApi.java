@@ -1,10 +1,15 @@
 package fr.thesmyler.smybteapi;
 
-import static fr.thesmyler.smybteapi.SmyBteApiUtil.*;
+import static fr.thesmyler.smybteapi.SmyBteApiUtil.getPropertyOrEnv;
+import static fr.thesmyler.smybteapi.SmyBteApiUtil.touchJsonResponse;
 import static spark.Spark.get;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,7 +25,7 @@ import spark.Response;
  */
 public class SmyBteApi {
 	
-	public static final String VERSION = "0.0.1";
+	public static String VERSION = null;
 	public static final String SOFTWARE_LICENSE = "MIT License";
 	public static final String SOFTWARE_CREDIT = "SmylerMC <smyler@mail.com>";
 	public static final String SOFTWARE_REPO = "https://github.com/SmylerMC/smyler-bte-api";
@@ -38,6 +43,14 @@ public class SmyBteApi {
     }
     
     public static void setup() {
+    	try(InputStream is = SmyBteApi.class.getResourceAsStream("version.properties"); 
+    			BufferedInputStream bs = new BufferedInputStream(is);
+    			Scanner sc = new Scanner(bs)){
+    		VERSION = sc.nextLine();
+    	} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	INSTANCE_NAME = getPropertyOrEnv("smybteapi.instance.name");
     	INSTANCE_CREDIT = getPropertyOrEnv("smybteapi.instance.credit");
     	INSTANCE_INFO = getPropertyOrEnv("smybteapi.instance.info");

@@ -39,14 +39,15 @@ public final class SmyBteApiUtil {
 	/**
 	 * Gets the specified system property.
 	 * <p>
-	 * If this property is not available, tries to return the environment variable with the same name.
+	 * If this property is not available, tries to return the environment variable with the same name,
+	 * capitalized and with dots '.' replaced by '_'
 	 * 
 	 * @param key
 	 * @return a system property or environment variable, or null if none exist for the specified key
 	 */
 	public static String getPropertyOrEnv(String key) {
 		String value = System.getProperty(key);
-		value = System.getenv(key);
+		value = System.getenv(key.replace(".", "_").toUpperCase());
 		if(stringIsNullOrEmpty(value)) value = null;
 		return value;
 	}

@@ -2,6 +2,7 @@ package fr.thesmyler.smybteapi;
 
 import static fr.thesmyler.smybteapi.SmyBteApiUtil.getPropertyOrEnv;
 import static fr.thesmyler.smybteapi.SmyBteApiUtil.touchJsonResponse;
+import static spark.Spark.after;
 import static spark.Spark.get;
 
 import java.io.BufferedInputStream;
@@ -10,6 +11,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,23 +40,50 @@ public class SmyBteApi {
 	public static final Gson GSON = new GsonBuilder().create();
 	public static final Gson GSON_PRETTY = new GsonBuilder().setPrettyPrinting().create();
 	
+	public static final Logger LOGGER = Logger.getLogger("smybteapi");
+	
     public static void main(String... args) {
-    	setup();
-        get("/info", SmyBteApi::info);
+    	setupLogging();
+    	setupPreferences();
+    	setupSpark();
     }
     
-    public static void setup() {
+    public static void setupLogging() {
+    	try(InputStream is = SmyBteApi.class.getResourceAsStream("logging.properties")) {
+    		LogManager.getLogManager().readConfiguration(is);
+    	} catch (IOException e) {
+			LOGGER.severe("Failed to set logging format!");
+			e.printStackTrace();
+		}
+    	LOGGER.info("Starting Smyler BTE API...");
     	try(InputStream is = SmyBteApi.class.getResourceAsStream("version.properties"); 
     			BufferedInputStream bs = new BufferedInputStream(is);
     			Scanner sc = new Scanner(bs)){
     		VERSION = sc.nextLine();
+    		LOGGER.info("Version: " + VERSION);
     	} catch (IOException e) {
-			// TODO Auto-generated catch block
+    		LOGGER.severe("Failed to read version information!");
 			e.printStackTrace();
 		}
+    }
+    
+    public static void setupPreferences() {
     	INSTANCE_NAME = getPropertyOrEnv("smybteapi.instance.name");
     	INSTANCE_CREDIT = getPropertyOrEnv("smybteapi.instance.credit");
     	INSTANCE_INFO = getPropertyOrEnv("smybteapi.instance.info");
+    }
+    
+    public static void setupSpark() {
+        after(SmyBteApi::logRequestResponsePair);
+        get("/info", SmyBteApi::info);
+    }
+    
+    private static void logRequestResponsePair(Request request, Response response) {
+    	String url = request.url();
+    	String client = request.ip();
+    	String method = request.requestMethod();
+    	int status = response.raw().getStatus();
+    	LOGGER.info(String.format("[%s] - [%s] %s %s", client, status, method, url));
     }
     
     public static String info(Request request, Response response) {

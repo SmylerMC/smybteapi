@@ -46,6 +46,14 @@ public class ApiSpecificationException extends RuntimeException {
 		
 	}
 	
+	public static class MultipleGetParameterException extends ApiSpecificationException {
+
+		public MultipleGetParameterException(String parameterName) {
+			super("Multiple get parameters", "The '" + parameterName + "' get parameter was excpected exactly once.");
+		}
+		
+	}
+	
 	public static class InvalidIntException extends ApiSpecificationException {
 
 		public InvalidIntException(String str) {
@@ -82,6 +90,14 @@ public class ApiSpecificationException extends RuntimeException {
 
 		public InvalidJsonException(String str) {
 			super("Failed to parse a json string.", "'" + str + "' is not a valid json object for this request.");
+		}
+		
+	}
+	
+	public static class InvalidValueException extends ApiSpecificationException {
+
+		public InvalidValueException(Object value, String str) {
+			super("Invalid value", "'" + value + "' is not a valid value for " + str + ".");
 		}
 		
 	}

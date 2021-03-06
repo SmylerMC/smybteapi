@@ -122,6 +122,7 @@ public class SmyBteApi {
         get("/info", SmyBteApi::info);
         get("/projection/toGeo", ProjectionRoutes::toGeo);
         get("/projection/fromGeo", ProjectionRoutes::fromGeo);
+        get("/webmercator/resolution", OtherRoutes::mercatorRes);
         afterAfter(SmyBteApi::logRequestResponsePair);
     }
     

@@ -8,7 +8,7 @@ import java.util.Scanner;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import fr.thesmyler.smybteapi.SmyBteApi;
-import fr.thesmyler.smybteapi.exception.ApiSpecificationException.InvalidJsonException;
+import fr.thesmyler.smybteapi.exception.ApiSpecificationException;
 import net.buildtheearth.terraplusplus.projection.GeographicProjection;
 import net.buildtheearth.terraplusplus.projection.dymaxion.ConformalDynmaxionProjection;
 
@@ -38,7 +38,7 @@ public class Projections {
 	    try {
 			return SmyBteApi.JSON_MAPPER.readValue(config, GeographicProjection.class);
 		} catch (JsonProcessingException e) {
-			throw new InvalidJsonException(config);
+			throw new ApiSpecificationException("Invalid projection JSON", config);
 		}
     }
 }

@@ -2,7 +2,7 @@ package net.buildtheearth.terraplusplus.projection.mercator;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import fr.thesmyler.smybteapi.SmyBteApiUtil;
+import fr.thesmyler.smybteapi.util.SmyBteApiUtil;
 import net.buildtheearth.terraplusplus.projection.GeographicProjection;
 import net.buildtheearth.terraplusplus.projection.OutOfProjectionBoundsException;
 

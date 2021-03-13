@@ -1,6 +1,6 @@
 package fr.thesmyler.smybteapi.exception;
 
-import static fr.thesmyler.smybteapi.SmyBteApiUtil.touchJsonResponse;
+import static fr.thesmyler.smybteapi.util.SmyBteApiUtil.touchJsonResponse;
 
 import com.google.gson.JsonObject;
 
@@ -8,12 +8,19 @@ import fr.thesmyler.smybteapi.SmyBteApi;
 import spark.Request;
 import spark.Response;
 
+/**
+ * Handles the various possible errors, through routing and Exception mappers
+ * 
+ * @author SmylerMC
+ *
+ */
 public final class ErrorHandler {
 	
 	private ErrorHandler() {} // static class
 	
 	/**
-	 * Handles ApiSpecificationException
+	 * Handles ApiSpecificationException, thrown when the user makes an invalid request,
+	 * showing a nice error to the user (HTTP 400)
 	 * 
 	 * @param exception
 	 * @param request
@@ -26,7 +33,8 @@ public final class ErrorHandler {
 	}
 	
 	/**
-	 * Handles all exceptions except ApiSpecificationException
+	 * Handles all exceptions except ApiSpecificationException.
+	 * This means a server error has been generated (HTTP 500)
 	 * 
 	 * @param exception
 	 * @param request
@@ -43,7 +51,7 @@ public final class ErrorHandler {
 	}
 	
 	/**
-	 * Handles requests that do not map any route
+	 * Handles requests that do not map any route (404)
 	 * 
 	 * @param request
 	 * @param response

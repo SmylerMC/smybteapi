@@ -1,7 +1,7 @@
 package fr.thesmyler.smybteapi;
 
-import static fr.thesmyler.smybteapi.SmyBteApiUtil.getPropertyOrEnv;
-import static fr.thesmyler.smybteapi.SmyBteApiUtil.touchJsonResponse;
+import static fr.thesmyler.smybteapi.util.SmyBteApiUtil.getPropertyOrEnv;
+import static fr.thesmyler.smybteapi.util.SmyBteApiUtil.touchJsonResponse;
 import static spark.Spark.afterAfter;
 import static spark.Spark.exception;
 import static spark.Spark.get;

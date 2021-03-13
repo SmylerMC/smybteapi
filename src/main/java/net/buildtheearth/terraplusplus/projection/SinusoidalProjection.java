@@ -2,7 +2,7 @@ package net.buildtheearth.terraplusplus.projection;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import fr.thesmyler.smybteapi.SmyBteApiUtil;
+import fr.thesmyler.smybteapi.util.SmyBteApiUtil;
 
 /**
  * Implementation of the Sinusoidal projection.

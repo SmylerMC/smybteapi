@@ -6,7 +6,7 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import fr.thesmyler.smybteapi.SmyBteApiUtil;
+import fr.thesmyler.smybteapi.util.SmyBteApiUtil;
 import net.buildtheearth.terraplusplus.config.GlobalParseRegistries;
 import net.buildtheearth.terraplusplus.config.TypedDeserializer;
 import net.buildtheearth.terraplusplus.config.TypedSerializer;

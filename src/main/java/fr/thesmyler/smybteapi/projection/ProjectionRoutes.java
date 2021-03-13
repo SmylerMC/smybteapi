@@ -1,10 +1,10 @@
 package fr.thesmyler.smybteapi.projection;
 
-import static fr.thesmyler.smybteapi.SmyBteApiUtil.parseFiniteDoublePointSafe;
-import static fr.thesmyler.smybteapi.SmyBteApiUtil.touchJsonResponse;
+import static fr.thesmyler.smybteapi.util.SmyBteApiUtil.touchJsonResponse;
 
 import fr.thesmyler.smybteapi.SmyBteApi;
-import fr.thesmyler.smybteapi.exception.Precondition;
+import fr.thesmyler.smybteapi.exception.GetParameterHelper;
+import fr.thesmyler.smybteapi.util.ValueChecks;
 import net.buildtheearth.terraplusplus.projection.GeographicProjection;
 import net.buildtheearth.terraplusplus.projection.OutOfProjectionBoundsException;
 import spark.Request;
@@ -13,19 +13,20 @@ import spark.Response;
 public final class ProjectionRoutes {
 
 	private ProjectionRoutes() {} // static class
+	
+	public static final int MAX_CONVERSIONS_PER_REQUEST = 1000;
 
 	public static String toGeo(Request request, Response response) {
 		touchJsonResponse(response);
-		Precondition.hasGetParam("mcpos", request);
-		String[] strs = request.queryParamsValues("mcpos");
-		Precondition.isArraySmaller(strs, 1000, "points");
+		GetParameterHelper.getMultiStringParam("mcpos", request);
+		Double[][] mcposs = GetParameterHelper.getMultiDoublePairParam("mcpos", request, MAX_CONVERSIONS_PER_REQUEST, ValueChecks::isFinitePair);
 		GeographicProjection projection = Projections.BTE_PROJECTION;
 		ToGeoResponse resp = new ToGeoResponse();
-		resp.total = strs.length;
-		resp.geo_positions = new double[strs.length][2];
-		for(int i=0; i<strs.length; i++) {
+		resp.total = mcposs.length;
+		resp.geo_positions = new double[mcposs.length][2];
+		for(int i=0; i<mcposs.length; i++) {
 			try {
-				double[] xz = parseFiniteDoublePointSafe(strs[i]);
+				Double[] xz = mcposs[i];
 				double[] lola = projection.toGeo(xz[0], xz[1]);
 				resp.geo_positions[i][0] = lola[1];
 				resp.geo_positions[i][1] = lola[0];
@@ -40,16 +41,14 @@ public final class ProjectionRoutes {
 	
 	public static String fromGeo(Request request, Response response) {
 		touchJsonResponse(response);
-		Precondition.hasGetParam("geopos", request);
-		String[] strs = request.queryParamsValues("geopos");
-		Precondition.isArraySmaller(strs, 1000, "points");
+		Double[][] geopos = GetParameterHelper.getMultiDoublePairParam("geopos", request, MAX_CONVERSIONS_PER_REQUEST, ValueChecks::isValidLatitudeLongitudePair);
 		GeographicProjection projection = Projections.BTE_PROJECTION;
 		FromGeoResponse resp = new FromGeoResponse();
-		resp.total = strs.length;
-		resp.mc_positions = new double[strs.length][2];
-		for(int i=0; i<strs.length; i++) {
+		resp.total = geopos.length;
+		resp.mc_positions = new double[geopos.length][2];
+		for(int i=0; i<geopos.length; i++) {
 			try {
-				double[] lalo = parseFiniteDoublePointSafe(strs[i]);
+				Double[] lalo = geopos[i];
 				resp.mc_positions[i] = projection.fromGeo(lalo[1], lalo[0]);
 				resp.success += 1;
 			} catch (OutOfProjectionBoundsException e) {

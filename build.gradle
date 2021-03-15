@@ -43,6 +43,8 @@ dependencies {
     
     compile group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.29'
     
+    compile 'com.github.SmylerMC:terraminusminus:master-SNAPSHOT'
+    
 }
 
 // Let build task generate a shadow jar

@@ -2,7 +2,7 @@
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SmylerMC/smybteapi/Java%20CI%20with%20Gradle?style=flat-square)
 
 
-Web API with useful coordinate convertion for BTE.
+Web API with useful coordinate conversion for BTE.
 
 For an online version of the converter, use this website: https://terramap.thesmyler.fr/coordinateconverter.html.
 

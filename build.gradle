@@ -1,16 +1,14 @@
 plugins {
     id "java"
     id "com.github.johnrengelman.shadow" version "6.1.0"
-    id "eclipse"
 }
 
-sourceCompatibility = 1.8
 group = "fr.thesmyler"
 version = "1.0." + ('git rev-list --count HEAD'.execute().text.trim())
 
 repositories {
     
-    jcenter()
+    mavenCentral()
     
     maven {
         name = "JitPack"
@@ -21,10 +19,10 @@ repositories {
         name = "DaPorkchop_"
         url = "https://maven.daporkchop.net/"
     }
-    
-    maven { //used for leveldb
-        name = "OpenCollab Snapshots"
-        url = "https://repo.opencollab.dev/snapshot/"
+
+    maven {
+        name = "PaperMC"
+        url = "https://papermc.io/repo/repository/maven-public/"
     }
     
 }
@@ -35,15 +33,15 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     
     // Spark to handle those fancy web requests
-    compile 'com.sparkjava:spark-core:2.9.3'
+    implementation 'com.sparkjava:spark-core:2.9.3'
     
     // Gson and Jackson to jsonnize and dejsonnize stuff
-    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
-    compile "com.fasterxml.jackson.core:jackson-databind:2.11.2"    
-    
-    compile group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.29'
-    
-    compile 'com.github.SmylerMC:terraminusminus:master-SNAPSHOT'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.11.2"
+
+    implementation group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.29'
+
+    implementation 'com.github.SmylerMC:terraminusminus:master-SNAPSHOT'
     
 }
 
@@ -65,6 +63,7 @@ processResources {
 
     // Redo when version changes
     inputs.property "version", project.version
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
     // Expand version token
     from(sourceSets.main.resources.srcDirs) {

@@ -26,7 +26,6 @@ import com.google.gson.JsonObject;
 import fr.thesmyler.smybteapi.exception.ApiSpecificationException;
 import fr.thesmyler.smybteapi.exception.ErrorHandler;
 import fr.thesmyler.smybteapi.projection.ProjectionRoutes;
-import fr.thesmyler.smybteapi.projection.Projections;
 import spark.Request;
 import spark.Response;
 
@@ -65,7 +64,6 @@ public class SmyBteApi {
     public static void main(String... args) {
     	setupLogging();
     	setupPreferences();
-    	Projections.setup();
     	setupSpark();
     }
     

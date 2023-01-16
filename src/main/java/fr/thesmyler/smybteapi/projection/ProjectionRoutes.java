@@ -5,12 +5,15 @@ import static fr.thesmyler.smybteapi.util.SmyBteApiUtil.touchJsonResponse;
 import fr.thesmyler.smybteapi.SmyBteApi;
 import fr.thesmyler.smybteapi.exception.GetParameterHelper;
 import fr.thesmyler.smybteapi.util.ValueChecks;
-import net.buildtheearth.terraplusplus.projection.GeographicProjection;
-import net.buildtheearth.terraplusplus.projection.OutOfProjectionBoundsException;
+import net.buildtheearth.terraminusminus.generator.EarthGeneratorSettings;
+import net.buildtheearth.terraminusminus.projection.GeographicProjection;
+import net.buildtheearth.terraminusminus.projection.OutOfProjectionBoundsException;
 import spark.Request;
 import spark.Response;
 
 public final class ProjectionRoutes {
+	
+	private static final GeographicProjection BTE_PROJECTION = EarthGeneratorSettings.parse(EarthGeneratorSettings.BTE_DEFAULT_SETTINGS).projection();
 
 	private ProjectionRoutes() {} // static class
 	
@@ -20,14 +23,13 @@ public final class ProjectionRoutes {
 		touchJsonResponse(response);
 		GetParameterHelper.getMultiStringParam("mcpos", request);
 		Double[][] mcposs = GetParameterHelper.getMultiDoublePairParam("mcpos", request, MAX_CONVERSIONS_PER_REQUEST, ValueChecks::isFinitePair);
-		GeographicProjection projection = Projections.BTE_PROJECTION;
 		ToGeoResponse resp = new ToGeoResponse();
 		resp.total = mcposs.length;
 		resp.geo_positions = new double[mcposs.length][2];
 		for(int i=0; i<mcposs.length; i++) {
 			try {
 				Double[] xz = mcposs[i];
-				double[] lola = projection.toGeo(xz[0], xz[1]);
+				double[] lola = BTE_PROJECTION.toGeo(xz[0], xz[1]);
 				resp.geo_positions[i][0] = lola[1];
 				resp.geo_positions[i][1] = lola[0];
 				resp.success += 1;
@@ -42,14 +44,13 @@ public final class ProjectionRoutes {
 	public static String fromGeo(Request request, Response response) {
 		touchJsonResponse(response);
 		Double[][] geopos = GetParameterHelper.getMultiDoublePairParam("geopos", request, MAX_CONVERSIONS_PER_REQUEST, ValueChecks::isValidLatitudeLongitudePair);
-		GeographicProjection projection = Projections.BTE_PROJECTION;
 		FromGeoResponse resp = new FromGeoResponse();
 		resp.total = geopos.length;
 		resp.mc_positions = new double[geopos.length][2];
 		for(int i=0; i<geopos.length; i++) {
 			try {
 				Double[] lalo = geopos[i];
-				resp.mc_positions[i] = projection.fromGeo(lalo[1], lalo[0]);
+				resp.mc_positions[i] = BTE_PROJECTION.fromGeo(lalo[1], lalo[0]);
 				resp.success += 1;
 			} catch (OutOfProjectionBoundsException e) {
 				resp.mc_positions[i] = null;

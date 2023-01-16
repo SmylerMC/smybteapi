@@ -20,11 +20,11 @@ public final class ErrorHandler {
 	
 	/**
 	 * Handles ApiSpecificationException, thrown when the user makes an invalid request,
-	 * showing a nice error to the user (HTTP 400)
+	 * showing a nice error to the user (HTTP 400).
 	 * 
-	 * @param exception
-	 * @param request
-	 * @param response
+	 * @param exception	the exception that was thrown by the underlying code
+	 * @param request	the request that initiated the error
+	 * @param response	the response that will be sent back to the client
 	 */
 	public static void handleUserGeneratedException(Exception exception, Request request, Response response) {
 		touchJsonResponse(response);
@@ -34,11 +34,10 @@ public final class ErrorHandler {
 	
 	/**
 	 * Handles all exceptions except ApiSpecificationException.
-	 * This means a server error has been generated (HTTP 500)
-	 * 
-	 * @param exception
-	 * @param request
-	 * @param response
+	 * This means a server error has been generated (HTTP 500).
+	 *
+	 * @param request	the request that initiated the error
+	 * @param response	the response that will be sent back to the client
 	 */
 	public static String handleServerError(Request request, Response response) {
 		touchJsonResponse(response);
@@ -51,10 +50,10 @@ public final class ErrorHandler {
 	}
 	
 	/**
-	 * Handles requests that do not map any route (404)
+	 * Handles requests that do not map any route (404).
 	 * 
-	 * @param request
-	 * @param response
+	 * @param request	the request that initiated the error
+	 * @param response	the response that will be sent back to the client
 	 */
 	public static String handleNotFound(Request request, Response response) {
 		touchJsonResponse(response);

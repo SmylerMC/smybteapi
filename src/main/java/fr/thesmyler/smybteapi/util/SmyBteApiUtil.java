@@ -15,18 +15,13 @@ public final class SmyBteApiUtil {
      * Earth's circumference around the equator, in meters.
      */
     public static final double EARTH_CIRCUMFERENCE = 40075017;
-
-    /**
-     * Earth's circumference around the poles, in meters.
-     */
-    public static final double EARTH_POLAR_CIRCUMFERENCE = 40008000;
     
 	private SmyBteApiUtil() {} // static class
 	
 	/**
 	 * Adds the necessary HTTP headers for a JSON response
 	 * 
-	 * @param response
+	 * @param response the response to modify
 	 */
 	public static void touchJsonResponse(Response response) {
 		response.type("application/json");
@@ -38,11 +33,12 @@ public final class SmyBteApiUtil {
 	 * If this property is not available, tries to return the environment variable with the same name,
 	 * capitalized and with dots '.' replaced by '_'
 	 * 
-	 * @param key
+	 * @param key the key to lookup
 	 * @return a system property or environment variable, or null if none exist for the specified key
 	 */
 	public static String getPropertyOrEnv(String key) {
 		String value = System.getProperty(key);
+		if (value != null) return value;
 		value = System.getenv(key.replace(".", "_").toUpperCase());
 		if(stringIsNullOrEmpty(value)) value = null;
 		return value;

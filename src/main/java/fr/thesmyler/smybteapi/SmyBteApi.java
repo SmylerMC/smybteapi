@@ -17,8 +17,6 @@ import java.util.Scanner;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import com.fasterxml.jackson.core.json.JsonReadFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -50,14 +48,6 @@ public class SmyBteApi {
 	public static String INSTANCE_INFO;
 	
 	public static final Gson GSON = new GsonBuilder().create();
-	public static final Gson GSON_PRETTY = new GsonBuilder().setPrettyPrinting().create();
-    public static final JsonMapper JSON_MAPPER = JsonMapper.builder()
-            .configure(JsonReadFeature.ALLOW_JAVA_COMMENTS, true)
-            .configure(JsonReadFeature.ALLOW_LEADING_ZEROS_FOR_NUMBERS, true)
-            .configure(JsonReadFeature.ALLOW_LEADING_DECIMAL_POINT_FOR_NUMBERS, true)
-            .configure(JsonReadFeature.ALLOW_NON_NUMERIC_NUMBERS, true)
-            .configure(JsonReadFeature.ALLOW_TRAILING_COMMA, true)
-            .build();
 	
 	public static final Logger LOGGER = Logger.getLogger("smybteapi");
 	

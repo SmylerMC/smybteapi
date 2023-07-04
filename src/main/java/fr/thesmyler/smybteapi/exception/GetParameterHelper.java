@@ -468,7 +468,7 @@ public final class GetParameterHelper {
 	}
 	
 	private static <T> T getParamAsUnique(String key, T[] arr) {
-		if(arr != null && arr.length == 1) throw new ApiSpecificationException("Single parameter required", "The '" + key + "' is needed exactly once.");
+		if(arr != null && arr.length != 1) throw new ApiSpecificationException("Single parameter required", "The '" + key + "' is needed exactly once (found it " + arr.length + " times).");
 		return arr != null ? arr[0] : null;
 	}
 	
